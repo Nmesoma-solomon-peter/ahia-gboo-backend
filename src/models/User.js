@@ -27,6 +27,26 @@ const User = sequelize.define('User', {
     type: DataTypes.ENUM('user', 'artisan', 'admin'),
     defaultValue: 'user'
   },
+  imageUrl: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  bio: {
+    type: DataTypes.TEXT,
+    allowNull: true
+  },
+  location: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  specialties: {
+    type: DataTypes.TEXT,
+    allowNull: true
+  },
+  experience: {
+    type: DataTypes.TEXT,
+    allowNull: true
+  },
   isActive: {
     type: DataTypes.BOOLEAN,
     defaultValue: true

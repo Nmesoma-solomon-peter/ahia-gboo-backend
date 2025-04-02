@@ -22,9 +22,12 @@ router.get('/', async (req, res) => {
       ];
     }
 
+    console.log('Fetching products with filters:', where);
     const products = await Product.findAll({ where });
+    console.log(`Found ${products.length} products`);
     res.json(products);
   } catch (error) {
+    console.error('Error fetching products:', error);
     res.status(500).json({ message: error.message });
   }
 });
@@ -32,20 +35,23 @@ router.get('/', async (req, res) => {
 // Get single product
 router.get('/:id', async (req, res) => {
   try {
-    console.log('Looking for product with ID:', req.params.id); // Debug log
+    console.log('Looking for product with ID:', req.params.id);
     const product = await Product.findOne({
       where: {
-        id: req.params.id
+        id: req.params.id,
+        isActive: true
       }
     });
+
     if (!product) {
-      console.log('Product not found'); // Debug log
+      console.log('Product not found with ID:', req.params.id);
       return res.status(404).json({ message: 'Product not found' });
     }
-    console.log('Product found:', product); // Debug log
+
+    console.log('Product found:', product.toJSON());
     res.json(product);
   } catch (error) {
-    console.error('Error finding product:', error); // Debug log
+    console.error('Error finding product:', error);
     res.status(500).json({ message: error.message });
   }
 });
@@ -66,12 +72,15 @@ router.post('/',
   validateRequest,
   async (req, res) => {
     try {
+      console.log('Creating new product with data:', req.body);
       const product = await Product.create({
         ...req.body,
-        artisanId: req.user.id // Assuming user is artisan
+        artisanId: req.user.id
       });
+      console.log('Product created successfully:', product.toJSON());
       res.status(201).json(product);
     } catch (error) {
+      console.error('Error creating product:', error);
       res.status(400).json({ message: error.message });
     }
   }
@@ -94,19 +103,26 @@ router.put('/:id',
   validateRequest,
   async (req, res) => {
     try {
+      console.log('Updating product with ID:', req.params.id);
+      console.log('Update data:', req.body);
+
       const product = await Product.findByPk(req.params.id);
       if (!product) {
+        console.log('Product not found with ID:', req.params.id);
         return res.status(404).json({ message: 'Product not found' });
       }
 
       // Check if user owns this product
       if (product.artisanId !== req.user.id) {
+        console.log('Unauthorized update attempt by user:', req.user.id);
         return res.status(403).json({ message: 'Not authorized to update this product' });
       }
 
       await product.update(req.body);
+      console.log('Product updated successfully:', product.toJSON());
       res.json(product);
     } catch (error) {
+      console.error('Error updating product:', error);
       res.status(400).json({ message: error.message });
     }
   }
@@ -115,19 +131,25 @@ router.put('/:id',
 // Delete product (protected route)
 router.delete('/:id', authenticateToken, async (req, res) => {
   try {
+    console.log('Deleting product with ID:', req.params.id);
     const product = await Product.findByPk(req.params.id);
+    
     if (!product) {
+      console.log('Product not found with ID:', req.params.id);
       return res.status(404).json({ message: 'Product not found' });
     }
 
     // Check if user owns this product
     if (product.artisanId !== req.user.id) {
+      console.log('Unauthorized delete attempt by user:', req.user.id);
       return res.status(403).json({ message: 'Not authorized to delete this product' });
     }
 
     await product.destroy();
+    console.log('Product deleted successfully');
     res.json({ message: 'Product deleted successfully' });
   } catch (error) {
+    console.error('Error deleting product:', error);
     res.status(500).json({ message: error.message });
   }
 });

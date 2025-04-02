@@ -2,6 +2,10 @@
 
 The backend server for Ahia Gboo, an e-commerce platform for African artisans to showcase and sell their traditional crafts.
 
+## API URL
+
+Production: https://ahia-gboo-backend.onrender.com/
+
 ## Features
 
 - User Authentication (JWT-based)
@@ -65,28 +69,56 @@ npm run migrate
 
 ## API Endpoints
 
+Base URL: https://ahia-gboo-backend.onrender.com/api
+
 ### Authentication
-- `POST /api/auth/register`: Register a new user
-- `POST /api/auth/login`: Login user
-- `GET /api/auth/me`: Get current user profile
+- `POST /auth/register`: Register a new user
+- `POST /auth/login`: Login user
+- `GET /auth/me`: Get current user profile
 
 ### Products
-- `GET /api/products`: Get all products
-- `GET /api/products/:id`: Get single product
-- `POST /api/products`: Create new product (Artisan only)
-- `PUT /api/products/:id`: Update product (Artisan only)
-- `DELETE /api/products/:id`: Delete product (Artisan only)
+- `GET /products`: Get all products
+- `GET /products/:id`: Get single product
+- `POST /products`: Create new product (Artisan only)
+- `PUT /products/:id`: Update product (Artisan only)
+- `DELETE /products/:id`: Delete product (Artisan only)
 
 ### Orders
-- `GET /api/orders`: Get user's orders
-- `POST /api/orders`: Create new order
-- `GET /api/orders/:id`: Get order details
-- `PUT /api/orders/:id/status`: Update order status (Admin only)
+- `GET /orders`: Get user's orders
+- `POST /orders`: Create new order
+- `GET /orders/:id`: Get order details
+- `PUT /orders/:id/status`: Update order status (Admin only)
 
 ### Artisans
-- `GET /api/artisans`: Get all artisans
-- `GET /api/artisans/:id`: Get artisan profile
-- `PUT /api/artisans/:id`: Update artisan profile
+- `GET /artisans`: Get all artisans
+- `GET /artisans/:id`: Get artisan profile
+- `PUT /artisans/:id`: Update artisan profile
+
+## API Response Format
+
+### Success Response
+```json
+{
+  "success": true,
+  "data": {
+    // Response data
+  }
+}
+```
+
+### Error Response
+```json
+{
+  "success": false,
+  "message": "Error message",
+  "errors": [
+    {
+      "field": "fieldName",
+      "message": "Field-specific error message"
+    }
+  ]
+}
+```
 
 ## Database Schema
 
@@ -133,21 +165,6 @@ npm run migrate
 - createdAt
 - updatedAt
 
-## Error Handling
-
-The API uses a consistent error response format:
-```json
-{
-  "message": "Error message",
-  "errors": [
-    {
-      "field": "fieldName",
-      "message": "Field-specific error message"
-    }
-  ]
-}
-```
-
 ## Security Features
 
 - JWT Authentication
@@ -191,4 +208,8 @@ npm start
 3. Commit your changes
 4. Push to the branch
 5. Create a Pull Request
+
+## Support
+
+For support, email support@ahia-gboo.com or create an issue in the repository.
 
